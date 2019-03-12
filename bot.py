@@ -3,6 +3,8 @@ from discord.ext import commands
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import random
+from discord.voice_client import  
+import youtube_dl
 
 gcreds = input('Google Creds:')
 
@@ -16,7 +18,9 @@ sheeturl = 'https://docs.google.com/spreadsheets/d/1ASX8MIDK594LuW3hxNyVYa3NFSIQ
 #initialize Sheets enviroment
 scope = ['https://spreadsheets.google.com/feeds']
 creds = ServiceAccountCredentials.from_json_keyfile_name(gcreds, scope)
-worksheet = None
+client = gspread.authorize(creds)
+sheet = client.open_by_url(sheeturl)
+worksheet = sheet.get_worksheet(0)
 
 #initialize Bot enviroment 
 description = 'Tragicly organize Tragic'
@@ -54,6 +58,7 @@ async def update(ctx, cname:str, level:float, non: int, awk:int, dp:int):
     
     updateGS(memid)
     await ctx.send('Info Updated')
+
 
 @bot.command(case_insensitive = False, description='Updates your data in the sheet.\nFormat: {0}gear NonAwk Awk Dp')
 async def gear(ctx, non: int, awk:int, dp:int):
@@ -116,6 +121,7 @@ async def l(ctx,level):
 
     updateGS(memid)
     await ctx.send('Info Updated')
+
 
 #Extra Funcs
 
