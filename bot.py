@@ -34,9 +34,6 @@ async def update(ctx, name:str, level:float, non: int, awk:int, dp:int):
     if non < 0 or awk < 0 or dp < 0 :
         await ctx.send('Incorrect input try again.')
         return
-    if fame > 5 or fame < 0:
-        await ctx.send('Incorrect Fame. Use ?Fame to update it.')
-        return
 
     if name.lower() != 'Mystic'.lower() and name.lower() != 'Striker'.lower() and name.lower() != 'Wizzard'.lower() and name.lower() != 'Witch'.lower() and name.lower() != 'Ninja'.lower() and name.lower() != 'Musa'.lower() and name.lower() != 'Archer'.lower() and name.lower() != 'Berserker'.lower() and name.lower() != 'Warrior'.lower() and name.lower() != 'Valkyrie'.lower() and name.lower() != 'Kunoichi'.lower() and name.lower() != 'Dark Knight'.lower() and name.lower() != 'Ranger'.lower() and name.lower() != 'Sorceress'.lower() and name.lower() != 'Lahn'.lower() and name.lower() != 'Tamer'.lower() and name.lower() != 'Maehwa'.lower() :
         await ctx.send('Incorrect input try again.')
@@ -56,6 +53,9 @@ async def update(ctx, name:str, level:float, non: int, awk:int, dp:int):
     memid = str(ctx.author)
     member = ctx.message.author.nick
 
+    name = name.lower
+    name[1] = name[1].capitalize
+
     try:
         x = worksheet.find(memid)
         worksheet.update_cell(x.row,2,member)
@@ -64,7 +64,6 @@ async def update(ctx, name:str, level:float, non: int, awk:int, dp:int):
         worksheet.update_cell(x.row,6,non)
         worksheet.update_cell(x.row,7,awk)
         worksheet.update_cell(x.row,8,dp)
-        worksheet.update_cell(x.row,9,fame)
 
     except:
         row = [memid,member,name,level,0,non,awk,dp,False]
@@ -121,6 +120,9 @@ async def c(ctx, name:str):
 
     memid = str(ctx.author)
     member = ctx.message.author.nick
+
+    name = name.lower
+    name[1] = name[1].capitalize
 
     try:
         x = worksheet.find(memid)
