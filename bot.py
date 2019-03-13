@@ -136,7 +136,7 @@ async def c(ctx, name:str):
     await ctx.send('Info Updated')
 
 @bot.command(case_insensitive = False, description='Updates Level in sheet.\nFormat: {0}level Level'.format(prefix), name='level')
-async def l(ctx,level:int):
+async def l(ctx,level:float):
 
     if level < 1 :
         await ctx.send('Incorrect input try again.')
