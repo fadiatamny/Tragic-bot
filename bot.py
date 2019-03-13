@@ -15,10 +15,6 @@ sheeturl = 'https://docs.google.com/spreadsheets/d/1ASX8MIDK594LuW3hxNyVYa3NFSIQ
 
 #initialize Sheets enviroment
 scope = ['https://spreadsheets.google.com/feeds']
-creds = ServiceAccountCredentials.from_json_keyfile_name(gcreds, scope)
-client = gspread.authorize(creds)
-sheet = client.open_by_url(sheeturl)
-worksheet = sheet.get_worksheet(0)
 
 #initialize Bot enviroment 
 description = 'Tragicly organize Tragic'
@@ -34,7 +30,11 @@ async def on_ready():
 
 @bot.command(case_insensitive = False, description='Updates your data in the sheet.\nFormat: {0}update Classname Level Nonawk Awk Dp')
 async def update(ctx, cname:str, level:float, non: int, awk:int, dp:int):
-    initGspread()
+
+    creds = ServiceAccountCredentials.from_json_keyfile_name(gcreds, scope)
+    client = gspread.authorize(creds)
+    sheet = client.open_by_url(sheeturl)
+    worksheet = sheet.get_worksheet(0)
 
     printmessage(ctx.message)
 
@@ -60,7 +60,10 @@ async def update(ctx, cname:str, level:float, non: int, awk:int, dp:int):
 
 @bot.command(case_insensitive = False, description='Updates your data in the sheet.\nFormat: {0}gear NonAwk Awk Dp')
 async def gear(ctx, non: int, awk:int, dp:int):
-    initGspread()
+    creds = ServiceAccountCredentials.from_json_keyfile_name(gcreds, scope)
+    client = gspread.authorize(creds)
+    sheet = client.open_by_url(sheeturl)
+    worksheet = sheet.get_worksheet(0)
 
     printmessage(ctx.message)
 
@@ -82,7 +85,10 @@ async def gear(ctx, non: int, awk:int, dp:int):
 
 @bot.command(case_insensitive = False, description='Updates Class in sheet.\nFormat: {0}class Classname'.format(prefix), name='class')
 async def c(ctx, name:str):
-    initGspread()
+    creds = ServiceAccountCredentials.from_json_keyfile_name(gcreds, scope)
+    client = gspread.authorize(creds)
+    sheet = client.open_by_url(sheeturl)
+    worksheet = sheet.get_worksheet(0)
 
     printmessage(ctx.message)
 
@@ -102,8 +108,10 @@ async def c(ctx, name:str):
 
 @bot.command(case_insensitive = False, description='Updates Level in sheet.\nFormat: {0}level Level'.format(prefix), name='level')
 async def l(ctx,level):
-    initGspread()
-
+    creds = ServiceAccountCredentials.from_json_keyfile_name(gcreds, scope)
+    client = gspread.authorize(creds)
+    sheet = client.open_by_url(sheeturl)
+    worksheet = sheet.get_worksheet(0)
     printmessage(ctx.message)
 
     memid = str(ctx.author)
@@ -125,6 +133,11 @@ async def l(ctx,level):
 
 def updateGS(memid):
 
+    creds = ServiceAccountCredentials.from_json_keyfile_name(gcreds, scope)
+    client = gspread.authorize(creds)
+    sheet = client.open_by_url(sheeturl)
+    worksheet = sheet.get_worksheet(0)
+    
     x = worksheet.find(memid)
     a = int(worksheet.cell(x.row,6).value) + int(worksheet.cell(x.row,7).value)
     b = int(worksheet.cell(x.row,8).value)
@@ -136,10 +149,6 @@ def updateGS(memid):
 def printmessage(message):
     print('{0.author}: {0.content}'.format(message))
 
-def initGspread():
-    client = gspread.authorize(creds)
-    sheet = client.open_by_url(sheeturl)
-    worksheet = sheet.get_worksheet(0)
 
 
 #run bot.
