@@ -53,8 +53,8 @@ async def update(ctx, name:str, level:float, non: int, awk:int, dp:int):
     memid = str(ctx.author)
     member = ctx.message.author.nick
 
-    name = name.lower
-    name[1] = name[1].capitalize
+    name = name.lower()
+    name = name.capitalize()
 
     try:
         x = worksheet.find(memid)
@@ -121,8 +121,8 @@ async def c(ctx, name:str):
     memid = str(ctx.author)
     member = ctx.message.author.nick
 
-    name = name.lower
-    name[1] = name[1].capitalize
+    name = name.lower()
+    name = name.capitalize()
 
     try:
         x = worksheet.find(memid)
