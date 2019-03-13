@@ -55,6 +55,7 @@ async def update(ctx, cname:str, level:float, non: int, awk:int, dp:int):
         worksheet.append_row(row)
     
     updateGS(memid)
+        
     await ctx.send('Info Updated')
 
 
