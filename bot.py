@@ -18,7 +18,7 @@ scope = ['https://spreadsheets.google.com/feeds']
 
 #initialize Bot enviroment 
 description = 'Tragicly organize Tragic'
-prefix = '?'
+prefix = '.'
 token = btoken
 
 bot = commands.Bot(command_prefix=prefix, description=description)
@@ -28,8 +28,8 @@ async def on_ready():
     print('Logged in as {0} {1}'.format(bot.user.id,bot.user.name))
     print('------')
 
-@bot.command(case_insensitive = False, description='Updates your data in the sheet.\nFormat: {0}update Classname Level Nonawk Awk Dp')
-async def update(ctx, cname:str, level:float, non: int, awk:int, dp:int):
+@bot.command(case_insensitive = False, description='Updates your data in the sheet.\nFormat: {0}update Classname Level Nonawk Awk Dp Famebuff')
+async def update(ctx, cname:str, level:float, non: int, awk:int, dp:int, fame:int):
 
     creds = ServiceAccountCredentials.from_json_keyfile_name(gcreds, scope)
     client = gspread.authorize(creds)
@@ -49,9 +49,13 @@ async def update(ctx, cname:str, level:float, non: int, awk:int, dp:int):
         worksheet.update_cell(x.row,6,non)
         worksheet.update_cell(x.row,7,awk)
         worksheet.update_cell(x.row,8,dp)
+        if fame > 5 or fame < 0:
+            await ctx.send('Incorrect Fame. Use ?Fame to update it.')
+        else:
+            worksheet.update_cell(x.row,9,fame)
 
     except:
-        row = [memid,member,cname,level,' ',non,awk,dp,False]
+        row = [memid,member,cname,level,0,non,awk,dp,fame,False]
         worksheet.append_row(row)
     
     updateGS(memid)
@@ -78,7 +82,7 @@ async def gear(ctx, non: int, awk:int, dp:int):
         worksheet.update_cell(x.row,8,dp)
 
     except:
-        row = [memid,member,' ', ' ', ' ',non,awk,dp,False]
+        row = [memid,member,' ', 0, 0,non,awk,dp,0,False]
         worksheet.append_row(row) 
 
     updateGS(memid)
@@ -101,7 +105,7 @@ async def c(ctx, name:str):
         worksheet.update_cell(x.row,3,name)
 
     except:
-        row = [memid,member,name,' ',' ',' ',' ',False]
+        row = [memid,member,name,0,0,0,0,0,0,False]
         worksheet.append_row(row)
 
     updateGS(memid)
@@ -123,11 +127,33 @@ async def l(ctx,level):
         worksheet.update_cell(x.row,4,level)
 
     except:
-        row = [memid,member,' ',level, ' ',' ',' ',' ',False]
+        row = [memid,member,' ',level, 0,0,0,0,0,False]
         worksheet.append_row(row)
 
     updateGS(memid)
     await ctx.send('Info Updated')
+
+@bot.command(case_insensitive = False, description='Updates Level in sheet.\nFormat: {0}Fame fame'.format(prefix), name='fame')
+async def f(ctx,fame):
+    creds = ServiceAccountCredentials.from_json_keyfile_name(gcreds, scope)
+    client = gspread.authorize(creds)
+    sheet = client.open_by_url(sheeturl)
+    worksheet = sheet.get_worksheet(0)
+    printmessage(ctx.message)
+
+    memid = str(ctx.author)
+    member = ctx.message.author.nick
+    
+    try:
+        x = worksheet.find(memid)
+        worksheet.update_cell(x.row,9,fame)
+
+    except:
+        row = [memid,member,' ',0, 0,0,0,0,fame,False]
+        worksheet.append_row(row)
+
+    updateGS(memid)
+    await ctx.send('Info Updated')   
 
 
 #Extra Funcs
@@ -142,9 +168,9 @@ def updateGS(memid):
     x = worksheet.find(memid)
     a = int(worksheet.cell(x.row,6).value) + int(worksheet.cell(x.row,7).value)
     b = int(worksheet.cell(x.row,8).value)
-
+    c = int(worksheet.cell(x.row,9).value)
     res = a/2 + b
-
+    res = res + c
     worksheet.update_cell(x.row,5,res)
 
 def printmessage(message):
