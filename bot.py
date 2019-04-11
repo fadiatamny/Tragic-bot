@@ -4,13 +4,14 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import random
 
+#getting google creds
 gcreds = input('Google Creds:')
 
 token = input('Bot Token:')
 
 btoken = open(token, "r").read() 
 
-
+#getting the google sheet to be worked wit
 sheeturl = 'https://docs.google.com/spreadsheets/d/1ASX8MIDK594LuW3hxNyVYa3NFSIQyJD3UMQ1jtGsHUo'
 
 #initialize Sheets enviroment
