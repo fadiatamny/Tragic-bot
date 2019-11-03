@@ -7,21 +7,22 @@ token = open('btoken.txt', "r").read()
 
 class Tragic(commands.Cog):
 
+    queue = asyncio.Queue()
+    pNext = asyncio.Event()
+
     def __init__(self, bot):
         self.bot = bot
-        self.queue = asyncio.Queue()
-        self.pNext = asyncio.Event()
 
     @staticmethod
-    async def task(self):
+    async def task():
         while True:
-            self.pNext.clear()
-            curr = await self.queue.get()
+            Tragic.pNext.clear()
+            curr = await Tragic.queue.get()
             curr.start()
-            await pNext.wait()
+            await Tragic.pNext.wait()
 
     def toggle(self):
-        self.bot.loop.call_soon_threadsafe(pNext.set)
+        self.bot.loop.call_soon_threadsafe(Tragic.pNext.set)
 
     @commands.command()
     async def play(self, ctx, url):
@@ -31,7 +32,7 @@ class Tragic(commands.Cog):
             v = bot.voice_client_in(ctx.message.server)
         
         p = await v.create_ytdl_player(url, after=toggle)
-        await self.queue.put(p)
+        await Tragic.queue.put(p)
 
     @commands.command()
     async def hi(self, ctx, args):
@@ -48,3 +49,5 @@ async def on_ready():
     bot.loop.create_task(Tragic.task())
 
 bot.run(token)
+
+# Gotta check if ffmpeg ydll is needed.
