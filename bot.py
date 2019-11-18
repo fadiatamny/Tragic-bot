@@ -5,6 +5,8 @@ import asyncio
 prefix = '$'
 token = open('btoken.txt', "r").read() 
 
+#commnet
+
 class Tragic(commands.Cog):
 
     queue = asyncio.Queue()
